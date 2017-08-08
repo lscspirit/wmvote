@@ -103,7 +103,6 @@ export default class RealtimeCounter {
         const timestamps = replies[index + 1];
         // if the list exists
         if (timestamps) {
-          console.log(timestamps);
           // compare the timestamps with the current time
           const valid_index = timestamps.findIndex(t => parseInt(t, 10) + recent_ttl >= current);
           if (valid_index < 0) {
