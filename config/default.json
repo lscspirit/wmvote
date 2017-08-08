@@ -1,0 +1,20 @@
+{
+  "vote": {
+    "recent_ttl": 600
+  },
+
+  "db": {
+    "host": "localhost",
+    "port": 3307,
+    "user": "root",
+    "password": "test1234",
+    "database": "wmvote",
+    "pool_max": 10
+  },
+
+  "redis": {
+    "host": "localhost",
+    "port": 6379,
+    "db":   0
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "name": "wmvote",
+  "version": "1.0.0",
+  "description": "vote portal",
+  "main": "index.js",
+  "scripts": {
+    "start": "babel-node ./bin/www",
+    "start-dev": "nodemon --config nodemon.json",
+    "db-migrate": "babel-node db/migrate.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "babel-node": "babel-node"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lscspirit/wmvote.git"
+  },
+  "author": "Derrick Yeung",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/lscspirit/wmvote/issues"
+  },
+  "homepage": "https://github.com/lscspirit/wmvote#readme",
+  "dependencies": {
+    "babel-polyfill": "^6.23.0",
+    "bluebird": "^3.5.0",
+    "body-parser": "^1.17.2",
+    "check-types": "^7.3.0",
+    "config": "^1.26.1",
+    "ejs": "^2.5.7",
+    "express": "^4.15.4",
+    "jquery": "^3.2.1",
+    "knex": "^0.13.0",
+    "morgan": "^1.8.2",
+    "mysql": "^2.14.1",
+    "prop-types": "^15.5.10",
+    "react": "^15.6.1",
+    "react-bootstrap": "^0.31.2",
+    "react-dom": "^15.6.1",
+    "redis": "^2.8.0",
+    "url-join": "^2.0.2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-loader": "^7.1.1",
+    "babel-plugin-root-import": "^5.1.0",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "css-loader": "^0.28.4",
+    "extract-text-webpack-plugin": "^3.0.0",
+    "node-sass": "^4.5.3",
+    "nodemon": "^1.11.0",
+    "sass-loader": "^6.0.6",
+    "style-loader": "^0.18.2",
+    "webpack": "^3.5.1",
+    "webpack-dev-middleware": "^1.12.0"
+  }
+}
