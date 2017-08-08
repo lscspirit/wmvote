@@ -4,13 +4,65 @@ import config from "config";
 
 import RedisHelper from "~/server/helpers/redis_helper";
 import Candidate from "~/models/candidate";
+import BallotRecord from "~/server/records/ballot_record";
 
+const CACHE_INIT_KEY = "wm-cache-init";
 const VOTE_COUNT_KEY = "wm-vote-counts";
 const RECENT_VOTE_KEY_PREFIX = "wm-vote-recent-";
 
 const recent_ttl = config.get("vote").recent_ttl;
 
 export default class RealtimeCounter {
+  /**
+   * Initialize the cache with the latest vote counts from
+   * data source.
+   *
+   * Only one instance of the init process will be run every
+   * when there are multiple application processes.
+   */
+  static init() {
+    const rc = RedisHelper.client;
+    rc.on("ready", () => {
+      rc.timeAsync().then(current => {
+        // first get the current server time
+        const current_time = parseInt(current[0], 10);
+
+        // begin watching the CACHE_INIT_KEY
+        rc.watch(CACHE_INIT_KEY);
+        // check if CACHE_INIT_KEY exists
+        rc.existsAsync(CACHE_INIT_KEY).then(res => {
+          if (res === 0) {
+            // if not exist; that means the cache has not been initialized
+
+            console.log("attempting to initialize RealtimeCounter");
+
+            // get the count from data source
+            BallotRecord.voteCounts().then(counts => {
+              const inputs = [VOTE_COUNT_KEY];    // redis hmset inputs
+              Object.keys(counts).forEach(code => {
+                inputs.push(code);          // field
+                inputs.push(counts[code]);  // value
+              });
+
+              let multi = rc.multi()
+              // store the counts into the VOTE_COUNT_KEY hash
+              multi.hmset.apply(multi, inputs)
+                // update the "start" entry with current time
+                .set(CACHE_INIT_KEY, current_time)
+                .execAsync().then(replies => {
+                  if (replies[1] !== null) console.log("RealtimeCounter initialized");
+                  else console.log("RealtimeCounter has been initialized by another process");
+                });
+            });
+          } else {
+            // the "start" entry is already there; no need to initialize
+            rc.unwatchAsync();
+          }
+        });
+      });
+    });
+  }
+
   /**
    * Count a ballot
    * @param  {Ballot} ballot ballot to be counted

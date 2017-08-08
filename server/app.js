@@ -15,12 +15,20 @@ import { errorResponseJson } from "~/server/helpers/response_helper";
 import MysqlHelper from "~/server/helpers/mysql_helper";
 import RedisHelper from "~/server/helpers/redis_helper";
 
+import RealtimeCounter from "~/server/lib/realtime_counter";
+
 //
 // DB and Redis Initialization
 //
 
 MysqlHelper.init();
 RedisHelper.init();
+
+//
+// Cache Init
+//
+
+RealtimeCounter.init();
 
 //
 // Initialize Express
