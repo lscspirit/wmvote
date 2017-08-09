@@ -23,6 +23,10 @@ router.post("/", function(req, res, next) {
   });
 });
 
+router.get("/result", function(req, res, next) {
+  res.render("votes/result");
+});
+
 router.get("/counts", function(req, res, next) {
   RealtimeCounter.liveCounts().then(counts => {
     res.status(200).json(counts);

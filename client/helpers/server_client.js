@@ -34,7 +34,7 @@ export default class ServerClient {
   /**
    * Cast a new Vote
    * @param  {Ballot} ballot ballot
-   * @return {Promise}
+   * @return {Promise<Ballot>}
    */
   static castVote(ballot) {
     const req = $.ajax({
@@ -48,6 +48,56 @@ export default class ServerClient {
     return new Promise((resolve, reject) => {
       req
         .done(data => resolve(new Ballot(data)))
+        .fail((xhr, status, err) => {
+          if (xhr.status >= 400 && xhr.status < 500) {
+            reject(xhr.responseJSON);
+          } else {
+            reject(new Error(status));
+          }
+        });
+    });
+  }
+
+  /**
+   * Get the live vote counts
+   * @return {Promise<Object<String, Integer>>} a promise that will be resolved
+   *   with counts for all candidates
+   */
+  static getLiveCounts() {
+    const req = $.ajax({
+      type: "GET",
+      url: "/votes/counts",
+      dataType: "json"
+    });
+
+    return new Promise((resolve, reject) => {
+      req
+        .done(data => resolve(data))
+        .fail((xhr, status, err) => {
+          if (xhr.status >= 400 && xhr.status < 500) {
+            reject(xhr.responseJSON);
+          } else {
+            reject(new Error(status));
+          }
+        });
+    });
+  }
+
+  /**
+   * Get recent vote counts
+   * @return {Promise<Object<String, Integer>>} a promise that will be resolved
+   *   with recent vote counts for all candidates
+   */
+  static getRecentCounts() {
+    const req = $.ajax({
+      type: "GET",
+      url: "/votes/recent",
+      dataType: "json"
+    });
+
+    return new Promise((resolve, reject) => {
+      req
+        .done(data => resolve(data))
         .fail((xhr, status, err) => {
           if (xhr.status >= 400 && xhr.status < 500) {
             reject(xhr.responseJSON);

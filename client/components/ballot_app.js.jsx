@@ -51,8 +51,8 @@ export default class BallotAppContainer extends React.PureComponent {
   }
 
   _onLbClose() {
-  this.setState({
-    lightbox: null
-  });
-}
+    this.setState({
+      lightbox: null
+    });
+  }
 }

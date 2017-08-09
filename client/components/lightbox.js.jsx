@@ -15,7 +15,7 @@ export default function lightbox(ContentComponent) {
     render() {
       const { lbMessage, onClose, ...other } = this.props;
       const message = lbMessage ? (
-        <Alert bsStyle="info">
+        <Alert bsStyle={ this.props.lbMsgStyle || "info" }>
           { lbMessage }
         </Alert>
       ) : null;
@@ -34,7 +34,8 @@ export default function lightbox(ContentComponent) {
     }
   };
   LB.propTypes = {
-    lbMessage: PropTypes.string,
+    lbMessage:  PropTypes.string,
+    lbMsgStyle: PropTypes.string,
     onClose: PropTypes.func.isRequired
   };
   LB.displayName = "Lightbox";

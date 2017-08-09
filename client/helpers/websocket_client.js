@@ -16,8 +16,17 @@ export default class WebSocketClient {
    * Subscribe to a channel
    * @param  {String}   channel channel name
    * @param  {Function} cb      callback function
+   * @return {Subscription} subscription object
    */
   static subscribe(channel, cb) {
-    this.client.subscribe(channel, cb);
+    return this.client.subscribe(channel, cb);
+  }
+
+  /**
+   * Unsubscribe from a channel
+   * @param  {Subscription} subscription the subscription object
+   */
+  static unsubscribe(subscription) {
+    if (subscription) subscription.cancel();
   }
 }

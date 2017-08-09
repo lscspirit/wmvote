@@ -73,3 +73,36 @@
     }
   }
 }
+
+.wm-vote-result {
+  .chart-panel {
+    text-align: center;
+  }
+
+  .count-panel {
+    text-align: center;
+
+    .candidate-result {
+      color: #ffffff;
+      font-size: 1.3em;
+      text-align: center;
+
+      margin: 20px 10px;
+      padding: 20px 5px;
+
+      border-radius: 0.25em;
+
+      .live-count {
+        font-size: 2.5em;
+      }
+
+      .live-percent {
+        margin: 5px 0;
+      }
+
+      .recent-count {
+        font-size: 0.8em;
+      }
+    }
+  }
+}

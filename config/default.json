@@ -1,7 +1,7 @@
 {
   "vote": {
     "recent_ttl": 600,
-    "update_freq": 60
+    "update_freq": 3
   },
 
   "db": {

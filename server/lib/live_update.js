@@ -14,8 +14,8 @@ export default class LiveUpdate {
 
       Promise.all([live_prom, recent_prom]).then(results => {
         WebSocketHelper.client.publish("/updates", {
-          live:   results[0],
-          recent: results[1]
+          live_counts:   results[0],
+          recent_counts: results[1]
         });
       });
     }, config.get("vote").update_freq * 1000);
