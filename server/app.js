@@ -4,6 +4,7 @@ import path from "path";
 import express from "express";
 import morgan from "morgan";
 import bodyParser from "body-parser";
+
 // webpack
 import webpack from "webpack";
 import webpackDevMiddleware from "webpack-dev-middleware";
@@ -16,6 +17,7 @@ import MysqlHelper from "~/server/helpers/mysql_helper";
 import RedisHelper from "~/server/helpers/redis_helper";
 
 import RealtimeCounter from "~/server/lib/realtime_counter";
+import LiveUpdate from "~/server/lib/live_update";
 
 //
 // DB and Redis Initialization
@@ -29,6 +31,7 @@ RedisHelper.init();
 //
 
 RealtimeCounter.init();
+LiveUpdate.start();
 
 //
 // Initialize Express
