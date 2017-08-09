@@ -107,9 +107,9 @@ export default class ResultAppContainer extends React.PureComponent {
               <Col sm={8} className="chart-panel">
                 <h3>Recent Vote Distribution</h3>
                 {
-                  this.state.live_counts ? (
+                  this.state.recent_counts ? (
                     <RecentVoteChart candidates={Candidate.all}
-                      counts={this.state.live_counts}
+                      counts={this.state.recent_counts}
                       colorScheme={this.state.color_scheme}/>
                   ) : null
                 }
