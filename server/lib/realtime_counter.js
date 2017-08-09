@@ -6,6 +6,7 @@ import RedisHelper from "~/server/helpers/redis_helper";
 import Candidate from "~/models/candidate";
 import BallotRecord from "~/server/records/ballot_record";
 
+const CACHE_DIRTY_KEY = "wm-cache-dirty";
 const CACHE_INIT_KEY = "wm-cache-init";
 const VOTE_COUNT_KEY = "wm-vote-counts";
 const RECENT_VOTE_KEY_PREFIX = "wm-vote-recent-";
@@ -13,6 +14,8 @@ const RECENT_VOTE_KEY_PREFIX = "wm-vote-recent-";
 const recent_ttl = config.get("vote").recent_ttl;
 
 export default class RealtimeCounter {
+  static get DIRTY_KEY() { return CACHE_DIRTY_KEY; }
+
   /**
    * Initialize the cache with the latest vote counts from
    * data source.
@@ -49,6 +52,8 @@ export default class RealtimeCounter {
               multi.hmset.apply(multi, inputs)
                 // update the "start" entry with current time
                 .set(CACHE_INIT_KEY, current_time)
+                // mark the cache as dirty
+                .set(CACHE_DIRTY_KEY, true)
                 .execAsync().then(replies => {
                   if (replies[1] !== null) console.log("RealtimeCounter initialized");
                   else console.log("RealtimeCounter has been initialized by another process");
@@ -78,6 +83,8 @@ export default class RealtimeCounter {
         .hincrby(VOTE_COUNT_KEY, ballot.candidate.code, 1)
         // insert the current time to the recent vote list for the candidate
         .rpush(recentVoteKey(ballot.candidate.code), current)
+        // mark the cache as dirty
+        .setnx(CACHE_DIRTY_KEY, true)
         .execAsync();
     });
   }
@@ -149,6 +156,7 @@ export default class RealtimeCounter {
       // the first reply is server time
       const current = parseInt(replies[0][0], 10);
 
+      let modified = false;
       let update = rc.multi();
       // find the index of the first valid entry for each list
       candidates.forEach((c, index) => {
@@ -157,18 +165,25 @@ export default class RealtimeCounter {
         if (timestamps) {
           // compare the timestamps with the current time
           const valid_index = timestamps.findIndex(t => parseInt(t, 10) + recent_ttl >= current);
-          if (valid_index < 0) {
+          if (timestamps.length > 0 && valid_index < 0) {
             // there is no valid entry; delete the whole list
             update = update.del(recentVoteKey(c.code));
+            modified = true;
           } else if (valid_index > 0) {
             // there is some invalid entry; trim the list
             update = update.ltrim(recentVoteKey(c.code), valid_index, -1);
+            modified = true;
           }
         }
       });
 
-      // execute the update
-      return update.execAsync();
+      if (modified) {
+        // mark cache as dirty and execute the update
+        return update.setnx(CACHE_DIRTY_KEY, true).execAsync();
+      } else {
+        // no updates needed
+        return Promise.resolve();
+      }
     });
   }
 }
