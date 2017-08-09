@@ -1,12 +1,12 @@
 {
   "vote": {
     "recent_ttl": 600,
-    "update_freq": 3
+    "update_freq": 5
   },
 
   "db": {
     "host": "localhost",
-    "port": 3307,
+    "port": 3306,
     "user": "root",
     "password": "test1234",
     "database": "wmvote",
