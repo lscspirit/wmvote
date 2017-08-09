@@ -1,0 +1,75 @@
+.wm-lightbox {
+  position: fixed;
+
+  top:    0;
+  bottom: 0;
+  left:   0;
+  right:  0;
+
+  z-index: 10000;
+
+  background-color: rgba(0, 0, 0, 0.7);
+
+  .wm-lightbox-panel {
+    margin: 30px 10% 0 10%;
+
+    .panel-actions {
+      text-align: center;
+    }
+  }
+}
+
+.wm-ballot {
+  .candidate-list {
+    margin: 20px 10px 50px;
+
+    .candidate {
+      margin: 40px 0;
+
+      font-size: 2.5em;
+
+      .name {
+        padding: 0.5em 0;
+      }
+
+      .selection {
+        padding: 0.5em 0;
+
+        color: #ffffff;
+        background-color: #5bc0de;
+        opacity: 0.65;
+
+        border: 1px solid #46b8da;
+        border-radius: 0.25em;
+
+        text-align: center;
+
+        cursor: pointer;
+
+        &:hover, &:active {
+          opacity: 1;
+        }
+
+        &.disabled, &.disabled:hover, &.disabled:active {
+          background-color: #777777;
+          border-color: #777777;
+          opacity: 0.65;
+
+          cursor: not-allowed;
+        }
+
+        &.selected, &.selected:hover, &.selected:active {
+          background-color: #5cb85c;
+          border-color: #4cae4c;
+          opacity: 1;
+
+          cursor: not-allowed;
+
+          &.disabled {
+            opacity: 0.65;
+          }
+        }
+      }
+    }
+  }
+}
